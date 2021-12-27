@@ -21,11 +21,11 @@ import FirebaseAnalyticsSwift
 
 public struct ErrorHandler<Content: View>: View {
     
-    @StateObject var errorObserver = ErrorObserver.shared
+    @StateObject fileprivate var errorObserver = ErrorObserver.shared
     
-    @ViewBuilder var content: () -> Content
+    @ViewBuilder fileprivate var content: () -> Content
     
-    init(content: @escaping () -> Content) {
+    public init(content: @escaping () -> Content) {
         self.content = content
     }
     
