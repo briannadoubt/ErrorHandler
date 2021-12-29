@@ -11,7 +11,7 @@ import SwiftUI
 import FirebaseCrashlytics
 #endif
 
-public actor ErrorObserver: ObservableObject {
+public class ErrorObserver: ObservableObject {
     
     public static var shared = ErrorObserver()
     
@@ -29,9 +29,7 @@ public actor ErrorObserver: ObservableObject {
     }
     
     @MainActor fileprivate func show<E: Error>(_ error: E, _ message: String?) {
-        Task {
-            await set(error, message)
-        }
+        set(error, message)
     }
     
     public func handleError<E: Error>(_ error: E, message: String? = nil) {

@@ -67,9 +67,7 @@ struct ErrorHandler_Previews: PreviewProvider {
             ErrorHandler {
                 List {
                     Button {
-                        Task {
-                            await ErrorObserver.shared.handleError(PreviewError.preview, message: "This is a preview, all is well.")
-                        }
+                        ErrorObserver.shared.handleError(PreviewError.preview, message: "This is a preview, all is well.")
                     } label: {
                         Text("Show Error")
                             .foregroundColor(.accentColor)
