@@ -1,6 +1,6 @@
 //
 //  ErrorObserver.swift
-//  Curiqi
+//  ErrorHandler
 //
 //  Created by Bri on 12/17/21.
 //
@@ -11,16 +11,15 @@ import SwiftUI
 import FirebaseCrashlytics
 #endif
 
-public class ErrorObserver: ObservableObject {
+public actor ErrorObserver: ObservableObject {
     
     public static var shared = ErrorObserver()
     
-    @Published var error: Error?
+    @Published public nonisolated var error: Error?
+    @Published public nonisolated var showingError = false
+    @Published public nonisolated var message: String?
     
-    @Published var showingError = false
-    @Published var message: String?
-    
-    fileprivate func set<E: Error>(_ error: E, _ message: String?) {
+    @MainActor fileprivate func show<E: Error>(_ error: E, _ message: String?) async {
         withAnimation {
             self.error = error
             self.showingError = true
@@ -28,14 +27,8 @@ public class ErrorObserver: ObservableObject {
         }
     }
     
-    @MainActor fileprivate func show<E: Error>(_ error: E, _ message: String?) {
-        set(error, message)
-    }
-    
-    public func handleError<E: Error>(_ error: E, message: String? = nil) {
-        Task {
-            await show(error, message)
-        }
+    @MainActor public func handleError<E: Error>(_ error: E, message: String? = nil) async {
+        await show(error, message)
         #if canImport(FirebaseCrashlytics)
         record(error)
         #endif
