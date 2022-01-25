@@ -27,10 +27,12 @@ public actor ErrorObserver: ObservableObject {
         }
     }
     
-    @MainActor public func handleError<E: Error>(_ error: E, message: String? = nil) async {
+    @MainActor public func handleError<E: Error>(_ error: E, message: String? = nil, showAlert: Bool = true) async {
         print(message ?? "Unknown error")
         print(error)
-        await show(error, message)
+        if showAlert {
+            await show(error, message)
+        }
         #if canImport(FirebaseCrashlytics)
         record(error)
         #endif
